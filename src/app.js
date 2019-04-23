@@ -1,4 +1,5 @@
-import * as React from 'react'
+import { h, Component } from 'preact'
+import Header from './header'
 import Repos from './repos'
 
 const storageKey = 'angrytech'
@@ -11,13 +12,13 @@ html, body {
 }
 `
 
-export default class App extends React.Component {
-  constructor(props) {
+export default class App extends Component {
+  constructor (props) {
     super(props)
     this.state = { repos: [] }
   }
 
-  getFromStorage() {
+  getFromStorage () {
     try {
       const data = JSON.parse(localStorage.getItem(storageKey))
       const now = new Date()
@@ -31,13 +32,13 @@ export default class App extends React.Component {
     }
   }
 
-  setInStorage(repos) {
+  setInStorage (repos) {
     try {
       localStorage.setItem(storageKey, JSON.stringify({ repos, date: new Date() }))
     } catch (_) {}
   }
 
-  componentDidMount() {
+  componentDidMount () {
     const style = document.createElement('style')
     style.innerHTML = globalStyles
     document.head.appendChild(style)
@@ -48,8 +49,8 @@ export default class App extends React.Component {
           this.setState({ repos })
         } else {
           fetch('https://api.github.com/users/zacanger/repos?sort=updated')
-            .then(b => b.json())
-            .then(rs => {
+            .then((b) => b.json())
+            .then((rs) => {
               const repos = rs
                 .filter((r) => !r.fork && !r.archived)
                 .map(
@@ -76,9 +77,10 @@ export default class App extends React.Component {
       })
   }
 
-  render() {
+  render () {
     return (
       <div>
+        <Header />
         <Repos repos={this.state.repos} />
       </div>
     )

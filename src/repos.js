@@ -1,24 +1,59 @@
-import * as React from 'react'
-import c from 'cxs/component'
+import { h } from 'preact'
 
-const Section = c('section')({
-  background: 'white',
-  padding: '24px 16px',
-  display: 'flex',
-  flexDirection: 'row',
-  flexWrap: 'wrap',
-  justifyContent: 'center',
-  maxWidth: '1500px',
-  marginLeft: 'auto',
-  marginRight: 'auto'
-})
+const styles = `
+section {
+  margin-top: 16px;
+  margin-right: auto;
+  background: white;
+  padding: 24px 16px;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+  max-width: 1500px;
+  margin-left: auto;
+}
+.stars {
+  color: gold;
+  content: star;
+}
+.nowrap {
+  fontSize: 14px;
+  marginBottom: 16px;
+}
+.reponame {
+  text-decoration: none;
+  margin-bottom: 8px;
+  color: #079941;
+}
+.reponame:hover {
+  text-decoration: underline;
+}
+.description {
+  color: #444;
+  font-size: 14px;
+}
+.repowrapper {
+  margin: 8px;
+  max-height: 400px;
+  overflow: hidden;
+  box-shadow: 2px 2px 4px #999;
+  transition: .2s ease-in-out transform, .2s ease-in-out box-shadow;
+  display: flex;
+  flex-direction: column;
+  padding: 8px;
+  width: 300px;
+  height: 150px;
+  max-width: 300px;
+  min-width: 200px;
+}
+.repowrapper:hover, .repowrapper:focus {
+  box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.15);
+  transform: translate(1px, -1px)
+}
+`
 
-const StarSpan = c('span')({
-  color: 'gold',
-  content: 'star'
-})
-
-const Star = () => <StarSpan>{' \u2605'}</StarSpan>
+const Star = () => <span className="stars">{' \u2605'}</span>
 
 const Stars = ({ stars }) => (
   <span>
@@ -26,68 +61,31 @@ const Stars = ({ stars }) => (
   </span>
 )
 
-const Description = c('div')({
-  color: '#444',
-  fontSize: '14px'
-})
-
-const RepoWrapper = c('article')({
-  ':hover,:focus': {
-    boxShadow: '0 8px 16px 0 rgba(0, 0, 0, 0.15)',
-    transform: 'translate(1px, -1px)'
-  },
-  margin: '8px',
-  maxHeight: '400px',
-  overflow: 'hidden',
-  boxShadow: '2px 2px 4px #999',
-  transition: '.2s ease-in-out transform, .2s ease-in-out box-shadow',
-  display: 'flex',
-  flexDirection: 'column',
-  padding: '8px',
-  width: '300px',
-  height: '150px',
-  maxWidth: '300px',
-  minWidth: '200px'
-})
-
-const RepoName = c('a')({
-  textDecoration: 'none',
-  marginBottom: '8px',
-  color: '#2cc1ed',
-  ':hover': {
-    textDecoration: 'underline'
-  }
-})
-
-const NoWrap = c('span')({
-  fontSize: '14px',
-  marginBottom: '16px'
-})
-
 const Repo = (props) => (
-  <RepoWrapper key={props.name}>
-    <RepoName href={props.url} target="blank" rel="noopener noreferrer">
+  <article className="repowrapper" key={props.name}>
+    <style dangerouslySetInnerHTML={{ __html: styles }} />
+    <a className="reponame" href={props.url} target="blank" rel="noopener noreferrer">
       {props.name}
-    </RepoName>
-    <NoWrap>
+    </a>
+    <span className="nowrap">
       <Stars stars={props.stars} />
       {props.language && (
-        <React.Fragment>
+        <span>
           {' '}
           &middot; <span>{props.language}</span>
-        </React.Fragment>
+        </span>
       )}
-    </NoWrap>
-    <Description>{props.description}</Description>
-  </RepoWrapper>
+    </span>
+    <div className="description">{props.description}</div>
+  </article>
 )
 
 const Repos = (props) => (
-  <Section>
+  <section>
     {props.repos.map((repo) => (
       <Repo {...repo} key={repo.name} />
     ))}
-  </Section>
+  </section>
 )
 
 export default Repos

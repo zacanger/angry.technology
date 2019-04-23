@@ -1,4 +1,12 @@
 {
   "root": true,
-  "extends": "eslint-config-zacanger"
+  "extends": "eslint-config-zacanger",
+  "rules": {
+    "react/prop-types": 0
+  },
+  "settings": {
+    "react": {
+      "pragma": "h"
+    }
+  }
 }

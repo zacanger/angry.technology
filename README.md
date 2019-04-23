@@ -6,6 +6,7 @@ To make your own, clone this and change the fetch in app.js.
 
 ## TODO
 
-Make this lightweight. Ditch React, CRA stuff, etc.
+* Make it smaller and faster
+* Fetch all repos, not one pagee
 
 [MIT](./LICENSE.md)
