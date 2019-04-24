@@ -38,6 +38,57 @@ export default class App extends Component {
     } catch (_) {}
   }
 
+  mapToState (rs) {
+    // .filter((r) => !r.fork && !r.archived)
+    const repos = rs
+      .map(
+        ({
+          description,
+          html_url: url,
+          language,
+          name,
+          stargazers_count: stars
+        }) => ({
+          description,
+          language,
+          name,
+          stars,
+          url
+        })
+      )
+      .sort((a, b) => b.stars - a.stars)
+
+    this.setInStorage(repos)
+    this.setState({ repos })
+  }
+
+  fetchAllRepos () {
+    return fetch('https://api.github.com/users/zacanger/repos?sort=updated')
+      .then((res) => {
+        const links = res.headers.get('link').split(',')
+        const totalPages = links.find((el) => el.includes('last'))
+        const pageAmount = totalPages.match(/page=(\d)/)[1]
+        const buildLinks = (n) =>
+          Array.from({ length: n }, (_, i) =>
+            `https://api.github.com/users/zacanger/repos?sort=updated&page=${i + 1}`
+          )
+
+        const fetches = buildLinks(pageAmount)
+          .map((repo) => fetch(repo).then((b) => b.json()))
+
+        const mapRepos = (cb) =>
+          Promise.all(fetches)
+            .then((chunks) => {
+              const repos = [].concat.apply([], chunks)
+              cb(repos)
+            })
+
+        return mapRepos((stuff) => {
+          this.mapToState(stuff)
+        })
+      })
+  }
+
   componentDidMount () {
     const style = document.createElement('style')
     style.innerHTML = globalStyles
@@ -48,31 +99,7 @@ export default class App extends Component {
         if (repos && repos.length) {
           this.setState({ repos })
         } else {
-          fetch('https://api.github.com/users/zacanger/repos?sort=updated')
-            .then((b) => b.json())
-            .then((rs) => {
-              const repos = rs
-                .filter((r) => !r.fork && !r.archived)
-                .map(
-                  ({
-                    description,
-                    html_url: url,
-                    language,
-                    name,
-                    stargazers_count: stars
-                  }) => ({
-                    description,
-                    language,
-                    name,
-                    stars,
-                    url
-                  })
-                )
-                .sort((a, b) => b.stars - a.stars)
-
-              this.setInStorage(repos)
-              this.setState({ repos })
-            })
+          this.fetchAllRepos()
         }
       })
   }
