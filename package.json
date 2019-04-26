@@ -5,6 +5,7 @@
   "scripts": {
     "build": "NODE_ENV=production webpack-cli -p --config config/webpack.config.js",
     "clean": "sortpack && rm -rf docs",
+    "postbuild": "echo angry.technology > docs/CNAME",
     "prebuild": "npm t && npm run clean",
     "test": "npm run test:lint",
     "test:lint": "eslint -c .eslintrc.json src/ config/ && sortpack"
