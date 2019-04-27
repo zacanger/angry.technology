@@ -18,8 +18,9 @@ section {
   content: star;
 }
 .nowrap {
-  fontSize: 14px;
-  marginBottom: 16px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  color: #444;
 }
 .reponame {
   text-decoration: none;
@@ -46,6 +47,7 @@ section {
   height: 150px;
   max-width: 300px;
   min-width: 200px;
+  text-decoration: none;
 }
 .repowrapper:hover, .repowrapper:focus {
   box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.15);
@@ -62,11 +64,17 @@ const Stars = ({ stars }) => (
 )
 
 const Repo = (props) => (
-  <article className="repowrapper" key={props.name}>
+  <a
+    className="repowrapper"
+    key={props.name}
+    href={props.url}
+    target="blank"
+    rel="noopener noreferrer"
+  >
     <style dangerouslySetInnerHTML={{ __html: styles }} />
-    <a className="reponame" href={props.url} target="blank" rel="noopener noreferrer">
+    <span className="reponame">
       {props.name}
-    </a>
+    </span>
     <span className="nowrap">
       <Stars stars={props.stars} />
       {props.language && (
@@ -77,7 +85,7 @@ const Repo = (props) => (
       )}
     </span>
     <div className="description">{props.description}</div>
-  </article>
+  </a>
 )
 
 const Repos = (props) => (
