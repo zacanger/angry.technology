@@ -8,4 +8,4 @@ To make your own, clone this and change the fetch in app.js.
 
 * Make it smaller and faster
 
-[MIT](./LICENSE.md)
+[LICENSE](./LICENSE.md)

@@ -2,6 +2,7 @@
   "name": "angry.technology",
   "version": "0.0.4",
   "private": true,
+  "license": "LGPL-3.0",
   "scripts": {
     "build": "NODE_ENV=production webpack-cli -p --config config/webpack.config.js",
     "clean": "sortpack && rm -rf docs",
